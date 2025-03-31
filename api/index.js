@@ -55,7 +55,7 @@ app.use('/api/post', postRoutes);
 // Serve static files and handle client routing
 app.use(express.static(join(__dirname, '../client/dist')));
 app.get('*', (req, res) => {
-  res.sendFile(join(__dirname, '../client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
 // Global error handler
