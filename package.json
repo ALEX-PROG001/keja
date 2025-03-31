@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon api/index.js",
+    "build": "npm install",
     "start": "node api/index.js"
   },
   "author": "",
