@@ -12,15 +12,26 @@ export default defineConfig({
       '/api': {
         target: 'https://kejafiti-2.onrender.com',
         changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api')
+        secure: false,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
       }
     }
   },
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: false
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor'
+          }
+        }
+      }
+    }
   }
 })
-// hello
