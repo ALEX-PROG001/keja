@@ -8,6 +8,7 @@ import listingRouter from './routes/listing.route.js';
 import cors from 'cors';
 import savedListingRoutes from './routes/savedListing.routes.js';
 import postRoutes from './routes/post.route.js';
+import path from 'path';
 
 dotenv.config();
 
@@ -37,6 +38,14 @@ app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/savedListing', savedListingRoutes);
 app.use('/api/post', postRoutes);
+
+// Serve static files from client build
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+// Handle client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {

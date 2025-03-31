@@ -10,28 +10,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://kejafiti-2.onrender.com',
-        changeOrigin: true,
-        secure: false,
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        }
+        target: 'http://localhost:3000',
+        changeOrigin: true
       }
     }
   },
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-    sourcemap: false,
-    chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor'
-          }
-        }
-      }
-    }
+    outDir: 'dist'
   }
 })

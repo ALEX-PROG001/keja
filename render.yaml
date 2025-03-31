@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: keja-app
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FIREBASE_API_KEY
+        sync: false
+      # Add any other environment variables your app needs
