@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
-"build": "set NODE_ENV=development && cd client && npm install && npm run build"
+    "build": "cd client && cross-env NODE_ENV=development npm install && npm run build",
+    "setup": "npm install && cd client && npm install"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +29,7 @@
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
-    "@vitejs/plugin-react-swc": "^3.8.1"
+    "@vitejs/plugin-react-swc": "^3.8.1",
+    "cross-env": "^7.0.3"
   }
 }
