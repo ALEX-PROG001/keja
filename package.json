@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.5.1",
@@ -25,5 +26,8 @@
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.9",
     "styled-components": "^6.1.15"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react-swc": "^3.8.1"
   }
 }
