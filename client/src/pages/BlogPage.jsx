@@ -14,7 +14,9 @@ export default function BlogPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/post/all`, {          credentials: "include",
+        console.log('Fetching posts...'); // Debug log
+        const res = await fetch('/api/post/all', {
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
         });
 

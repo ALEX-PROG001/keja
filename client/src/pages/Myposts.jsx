@@ -14,7 +14,8 @@ export default function MyPosts() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/post/my`, {
+        console.log('Fetching my posts...'); // Debug log
+        const res = await fetch('/api/post/my', {
           credentials: "include",
           headers: { "Content-Type": "application/json" },
         });

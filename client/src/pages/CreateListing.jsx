@@ -89,25 +89,22 @@ export default function CreateListing() {
     try {
       console.log("Submitting Form Data:", formData);
       
-     // Use POST for both create and update (update endpoint uses POST)
-const endpoint = isEditMode 
-? `${import.meta.env.VITE_API_URL}/api/listing/update/${formData._id}` 
-: `${import.meta.env.VITE_API_URL}/api/listing/create`;
-const method = "POST";
-      
-      const res = await fetch(endpoint, {
-        method,
-        headers: { 
-          "Content-Type": "application/json",
-          // Uncomment the following if your backend requires an Authorization header:
-          // "Authorization": `Bearer ${currentUser.token}`,
-        },
-        credentials: "include", // include cookies if using cookie-based auth
-        body: JSON.stringify({
-          ...formData,
-          userRef: currentUser._id,
-        }),
-      });
+     // Use POST for both create and update
+     const endpoint = isEditMode 
+     ? `/api/listing/update/${formData._id}`
+     : '/api/listing/create';
+
+   const res = await fetch(endpoint, {
+     method: 'POST',
+     headers: { 
+       "Content-Type": "application/json",
+     },
+     credentials: "include",
+     body: JSON.stringify({
+       ...formData,
+       userRef: currentUser._id,
+     }),
+   });
       
       const data = await res.json();
       console.log("Server Response:", data);
@@ -119,7 +116,7 @@ const method = "POST";
       }
 
       alert(isEditMode ? "Listing updated successfully!" : "Listing created successfully!");
-      navigate(`/listing/${data._id}`);
+      navigate(`/my-listing/${data._id}`);
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("Something went wrong. Please try again.");

@@ -1,18 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
-// https://vite.dev/config/
+
 export default defineConfig({
-  // ...other config
+  plugins: [
+    tailwindcss(),
+    react()
+  ],
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'https://kejafiti-2.onrender.com',
         changeOrigin: true,
-      },
-    },
-  },
-  plugins: [
-    tailwindcss(),
-    react()],
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    }
+  }
 })

@@ -7,7 +7,7 @@ import {
   updateUserFailure,
   deleteUserFailure,
   deleteUserStart,
- 
+  signOutUserSuccess,
   signOutUserStart,
 } from "../redux/user/userSlice";
 
@@ -62,7 +62,8 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/update/${currentUser._id}`, {        method: "POST",
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
         headers: { 
           "Content-Type": "application/json",
         },
@@ -86,36 +87,63 @@ export default function Profile() {
   
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
+      // Clear password field after successful update
+      setFormData(prev => ({ ...prev, password: '' }));
     } catch (error) {
       console.error('Update error:', error);
       dispatch(updateUserFailure(error.message));
     }
   };
+
   const handleDeleteUser = async () => {
+    if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      return;
+    }
+
     try {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
-        credentials: 'include' // Add this line
+        credentials: 'include'
       });
-      // ...rest of the code
+
+      const data = await res.json();
+      
+      if (res.ok) {
+        localStorage.removeItem('currentUser');
+        navigate('/sign-in');
+      } else {
+        throw new Error(data.message || 'Failed to delete account');
+      }
     } catch (error) {
+      console.error('Delete error:', error);
       dispatch(deleteUserFailure(error.message));
     }
   };
-  
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch("/api/auth/signout", {
-        credentials: 'include' // Add this line
+      const res = await fetch('/api/auth/signout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-      // ...rest of the code
+  
+      // Always clear local data and redirect
+      localStorage.removeItem('currentUser');
+      dispatch(signOutUserSuccess());
+      navigate('/sign-in');
+  
     } catch (error) {
-      dispatch(deleteUserFailure(error.message));
+      console.error('Sign out error:', error);
+      // Still clear local data even if API call fails
+      localStorage.removeItem('currentUser');
+      dispatch(signOutUserSuccess());
+      navigate('/sign-in');
     }
   };
-
   return (
     <div className="relative flex flex-col min-h-screen bg-white w-full max-w-screen-2xl mx-auto px-4 pb-20">
       <div className="flex flex-col items-center justify-center w-full mt-6">
