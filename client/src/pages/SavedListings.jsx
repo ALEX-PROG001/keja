@@ -63,7 +63,7 @@ export default function SavedListings() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Header />
+      
       <main className="mx-auto max-w-md px-4 py-6 flex-1">
         <h1 className="text-2xl font-bold mb-4">Saved Listings</h1>
         {loading ? (
