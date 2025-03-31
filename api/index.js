@@ -52,13 +52,15 @@ app.use((err, req, res, next) => {
 
 // Database connection
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('Connected to MongoDB!');
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000,  // Increase timeout to 30s
+    socketTimeoutMS: 45000,  // Increase socket timeout
   })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-  });
+  .then(() => console.log('✅ Connected to MongoDB!'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
