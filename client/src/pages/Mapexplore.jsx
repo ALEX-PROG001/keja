@@ -28,7 +28,7 @@ export default function Mapexplore() {
             .openPopup();
 
           // Fetch listings from the database
-          fetch("http://localhost:3000/api/listing/getall")
+          fetch(`${import.meta.env.VITE_API_URL}/api/listing/getall`)
             .then((res) => res.json())
             .then((listings) => {
               listings.forEach((listing) => {

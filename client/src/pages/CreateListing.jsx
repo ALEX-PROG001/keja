@@ -89,11 +89,11 @@ export default function CreateListing() {
     try {
       console.log("Submitting Form Data:", formData);
       
-      // Use POST for both create and update (update endpoint uses POST)
-      const endpoint = isEditMode 
-        ? `http://localhost:3000/api/listing/update/${formData._id}` 
-        : "http://localhost:3000/api/listing/create";
-      const method = "POST";
+     // Use POST for both create and update (update endpoint uses POST)
+const endpoint = isEditMode 
+? `${import.meta.env.VITE_API_URL}/api/listing/update/${formData._id}` 
+: `${import.meta.env.VITE_API_URL}/api/listing/create`;
+const method = "POST";
       
       const res = await fetch(endpoint, {
         method,

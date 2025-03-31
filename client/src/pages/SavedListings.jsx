@@ -14,8 +14,7 @@ export default function SavedListings() {
     const fetchSavedListings = async () => {
       try {
         setLoading(true);
-        const res = await fetch('http://localhost:3000/api/savedListing/user/saved', {
-          credentials: 'include',
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/savedListing/user/saved`, {          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -43,8 +42,7 @@ export default function SavedListings() {
 
   const handleDelete = async (listingId) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/savedListing/listing/save/${listingId}`, {
-        method: 'DELETE',
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/savedListing/listing/save/${listingId}`, {        method: 'DELETE',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',

@@ -88,8 +88,7 @@ export default function CreatePosts() {
         image: imageUrl // Include the image URL in post data
       };
       
-      const res = await fetch("http://localhost:3000/api/post/create", {
-        method: "POST",
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/post/create`, {        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
