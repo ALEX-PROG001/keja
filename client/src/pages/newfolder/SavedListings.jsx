@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import ListingCard from '../components/ListingCard';
-import Header from '../components/Header';
-import BottomNav from '../components/BottomNav';
+import ListingCard from '../../components/ListingCard';
+import Header from '../../components/Header';
+import BottomNav from '../../components/BottomNav';
 
 export default function SavedListings() {
   const { currentUser } = useSelector((state) => state.user);
@@ -89,3 +89,4 @@ export default function SavedListings() {
     </div>
   );
 }
+//help
