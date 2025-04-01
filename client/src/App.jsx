@@ -18,9 +18,9 @@ import MapExplore from './pages/newfolder/MapExplore.jsx'; // Changed from Mapex
 import Search from './pages/Search';
 import SearchResults from './pages/newfolder/SearchResults.jsx'; // Changed from Searchresults
 import SavedListings from './pages/newfolder/SavedListings';
-import MyPosts from './pages/MyPosts'; // Changed from Myposts
+import MyPosts from './pages/newfolder/MyPosts'; // Changed from Myposts
 import CreatePosts from './components/CreatePosts.jsx';
-import BlogPage from './pages/BlogPage';
+import BlogPage from './components/BlogPage';
 
 export default function App() {
   return (
