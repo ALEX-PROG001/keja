@@ -1,44 +1,51 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
-import { app } from '../firebase';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase';
 import { useDispatch } from 'react-redux';
-import { signInSuccess } from '../redux/user/userSlice';
+import { signInSuccess, signInFailure } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleGoogleClick = async () => {
     try {
-      const provider = new GoogleAuthProvider();
-      const auth = getAuth(app);
-
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, googleProvider);
 
       const res = await fetch('/api/auth/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
           photo: result.user.photoURL,
         }),
       });
+
+      if (!res.ok) {
+        throw new Error('Failed to authenticate with server');
+      }
+
       const data = await res.json();
       dispatch(signInSuccess(data));
       navigate('/');
     } catch (error) {
-      console.log('could not sign in with google', error);
+      console.error('Google sign in error:', error);
+      dispatch(signInFailure(error.message));
     }
   };
+
   return (
     <button
       onClick={handleGoogleClick}
       type='button'
-      className='bg-red-700 text-white p-3 rounded-lg uppercase hover:opacity-95'
+      className='w-full h-12 rounded-xl bg-red-500 text-white text-base font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all'
     >
-      Continue with google
+      <img src="/google.svg" alt="Google" className="h-6" />
+      Continue with Google
     </button>
   );
 }
