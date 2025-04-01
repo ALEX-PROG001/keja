@@ -17,7 +17,7 @@ import UpdateListing from './pages/UpdateListing';
 import MapExplore from './pages/newfolder/MapExplore.jsx'; // Changed from Mapexplore
 import Search from './pages/Search';
 import SearchResults from './pages/newfolder/SearchResults.jsx'; // Changed from Searchresults
-import SavedListings from './pages/SavedListings';
+import SavedListings from './pages/newfolder/SavedListings';
 import MyPosts from './pages/MyPosts'; // Changed from Myposts
 import CreatePosts from './components/CreatePosts.jsx';
 import BlogPage from './pages/BlogPage';
