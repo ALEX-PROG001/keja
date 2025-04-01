@@ -19,7 +19,7 @@ import Search from './pages/Search';
 import SearchResults from './pages/newfolder/SearchResults.jsx'; // Changed from Searchresults
 import SavedListings from './pages/SavedListings';
 import MyPosts from './pages/MyPosts'; // Changed from Myposts
-import CreatePosts from './pages/CreatePosts';
+import CreatePosts from './components/CreatePosts.jsx';
 import BlogPage from './pages/BlogPage';
 
 export default function App() {
