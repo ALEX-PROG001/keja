@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import MapSelect from "../components/MapSelect";
-import UploadPage from "./UploadPage";
+import UploadPage from "./newfolder/UploadPage";
 
 const PROPERTY_TYPES = [
   "rentals", "for-sale", "bnbs", "technicians", 

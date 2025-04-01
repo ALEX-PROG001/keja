@@ -10,7 +10,7 @@ import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import Settings from './components/Settings.jsx'; // Changed from settings
 import CreateListing from './pages/CreateListing';
-import UploadPage from './pages/UploadPage'; // Changed from Uploadpage
+import UploadPage from './pages/newfolder/UploadPage.jsx'; // Changed from Uploadpage
 import MyListing from './pages/MyListing';
 import AllListings from './pages/AllListings'; // Changed from All_listings
 import UpdateListing from './pages/UpdateListing';
