@@ -14,7 +14,7 @@ import UploadPage from './pages/newfolder/UploadPage.jsx'; // Changed from Uploa
 import MyListing from './pages/MyListing';
 import AllListings from './pages/AllListings'; // Changed from All_listings
 import UpdateListing from './pages/UpdateListing';
-import MapExplore from './pages/MapExplore'; // Changed from Mapexplore
+import MapExplore from './pages/newfolder/MapExplore.jsx'; // Changed from Mapexplore
 import Search from './pages/Search';
 import SearchResults from './pages/SearchResults'; // Changed from Searchresults
 import SavedListings from './pages/SavedListings';

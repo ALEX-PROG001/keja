@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import ListingCard from "../components/ListingCard";
+import ListingCard from "../../components/ListingCard";
 import { X } from "lucide-react";
 
 export default function Mapexplore() {
