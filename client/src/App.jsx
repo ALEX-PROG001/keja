@@ -8,7 +8,8 @@ import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
-import Settings from './components/Settings.jsx'; // Changed from settings
+import Settings from './components/Settings.jsx'; // Changed from settings//help
+
 import CreateListing from './pages/CreateListing';
 import UploadPage from './pages/newfolder/UploadPage.jsx'; // Changed from Uploadpage
 import MyListing from './pages/MyListing';
