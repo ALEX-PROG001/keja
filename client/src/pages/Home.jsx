@@ -108,7 +108,7 @@ export default function Home() {
               </div>
                             {/* Glassmorphic "Explore on Map" Button */}
                             <button 
-  onClick={() => navigate('/mapexplore')}
+  onClick={() => navigate('/maplayout')}
   className="absolute top-6 left-4 right-4 bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg py-2 px-3 flex items-center justify-center hover:bg-white/30 transition-all duration-300"
 >
   <span className="text-black font-semibold text-lg">Explore on Map</span>

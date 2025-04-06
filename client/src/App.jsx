@@ -40,7 +40,7 @@ export default function App() {
           <Route path="/upload" element={<UploadPage />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/map-explore" element={<MapExplore />} />
+          <Route path="/mapexplore" element={<MapExplore />} />
           <Route path="/saved-listings" element={<SavedListings />} />
           <Route path="/search-results" element={<SearchResults />} />
           <Route path="/my-posts" element={<MyPosts />} />
