@@ -1,0 +1,7 @@
+.map-container {
+    width: 100vw; /* Full screen width */
+    height: calc(100vh - 60px); /* Adjust to avoid overlapping BottomNav */
+    border-radius: 20px; /* Rounded corners */
+    overflow: hidden; /* Prevents overflow issues */
+  }
+  

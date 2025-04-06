@@ -55,14 +55,25 @@ const listingSchema = new mongoose.Schema(
         required: true,
       },
     },
+    areaName: {
+      type: String,
+      default: 'Unknown'
+    },
+    
     userRef: {
       type: String,
       required: true,
     },
+    saves: {
+      type: Number,
+      default: 0
+    }
+    
   },
   { timestamps: true }
 );
 
 const Listing = mongoose.model('Listing', listingSchema);
+
 
 export default Listing;

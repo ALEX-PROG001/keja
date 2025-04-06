@@ -1,20 +1,25 @@
 import Listing from '../models/listing.model.js';
+import { getAreaName } from '../../client/src/pages/geoHelper.js';
 
 export const createListing = async (req, res, next) => {
   try {
-    // If location is a string, convert it to GeoJSON
-    if (req.body.location && typeof req.body.location === 'string') {
-      const parts = req.body.location.split(',');
-      if (parts.length === 2) {
-        const lat = parseFloat(parts[0].trim());
-        const lng = parseFloat(parts[1].trim());
-        req.body.location = {
-          type: 'Point',
-          coordinates: [lng, lat] // Note: GeoJSON expects [longitude, latitude]
-        };
-      }
+    let locationData = req.body.location;
+
+    // If location is provided as string coordinates
+    if (locationData && typeof locationData === 'string') {
+      const [lat, lng] = locationData.split(',').map(coord => parseFloat(coord.trim()));
+      
+      // Get area name using existing geoHelper function
+      const areaName = await getAreaName(lat, lng);
+      
+      // Update the request body with location and area name
+      req.body.location = {
+        type: 'Point',
+        coordinates: [lng, lat] // GeoJSON format: [longitude, latitude]
+      };
+      req.body.areaName = areaName;
     }
-    
+
     const listing = await Listing.create(req.body);
     return res.status(201).json(listing);
   } catch (error) {
@@ -122,52 +127,114 @@ export const getListing = async (req, res, next) => {
   
   export const getListings = async (req, res, next) => {
     try {
-      const limit = parseInt(req.query.limit) || 9;
-      const startIndex = parseInt(req.query.startIndex) || 0;
-      
-      const searchQuery = {};
-      
-      // Search term - now searches in both name and description
-      if (req.query.searchTerm) {
+      const {
+        searchTerm,
+        type,
+        bedrooms,
+        minPrice,
+        maxPrice,
+      } = req.query;
+  
+      let searchQuery = {};
+  
+      // Search functionality
+      if (searchTerm) {
         searchQuery.$or = [
-          { name: { $regex: req.query.searchTerm, $options: 'i' } },
-          { description: { $regex: req.query.searchTerm, $options: 'i' } }
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { description: { $regex: searchTerm, $options: 'i' } },
+          { areaName: { $regex: searchTerm, $options: 'i' } }
         ];
       }
   
-      // ... keep existing filters ...
-      if (req.query.type && req.query.type !== 'all') {
-        searchQuery.type = req.query.type;
+      // Add filters
+      if (type && type !== 'all') {
+        searchQuery.type = type;
+      }
+      
+      if (bedrooms && bedrooms !== 'Any') {
+        searchQuery.bedrooms = bedrooms;
       }
   
-      if (req.query.furnished === 'true') {
-        searchQuery.furnished = true;
-      }
-      if (req.query.parking === 'true') {
-        searchQuery.parking = true;
-      }
-  
-      if (req.query.minPrice || req.query.maxPrice) {
+      if (minPrice || maxPrice) {
         searchQuery.price = {};
-        if (req.query.minPrice) searchQuery.price.$gte = parseInt(req.query.minPrice);
-        if (req.query.maxPrice) searchQuery.price.$lte = parseInt(req.query.maxPrice);
+        if (minPrice) searchQuery.price.$gte = parseInt(minPrice);
+        if (maxPrice && maxPrice !== 'above') searchQuery.price.$lte = parseInt(maxPrice);
       }
   
-      console.log('Search Query:', searchQuery); // Debug log
-  
-      const listings = await Listing.find(searchQuery)
-        .sort({ createdAt: 'desc' })
-        .limit(limit)
-        .skip(startIndex);
-  
-      const total = await Listing.countDocuments(searchQuery);
+      const listings = await Listing.find(searchQuery).sort({ createdAt: 'desc' });
   
       res.status(200).json({
         success: true,
-        total,
         listings
       });
   
+    } catch (error) {
+      next(error);
+    }
+  };
+  export const saveListing = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user.id;
+  
+      // Check if already saved
+      const existingSave = await SavedListing.findOne({ listingId: id, userId });
+      if (existingSave) {
+        return next(errorHandler(400, 'Listing already saved'));
+      }
+  
+      // Create save record and increment counter atomically
+      await Promise.all([
+        SavedListing.create({ listingId: id, userId }),
+        Listing.findByIdAndUpdate(id, { $inc: { saves: 1 } })
+      ]);
+  
+      // Get updated listing with new save count
+      const updatedListing = await Listing.findById(id);
+  
+      res.status(200).json({
+        success: true,
+        saves: updatedListing.saves
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+  export const unsaveListing = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user.id;
+  
+      // Remove save record and decrement counter atomically
+      await Promise.all([
+        SavedListing.findOneAndDelete({ listingId: id, userId }),
+        Listing.findByIdAndUpdate(id, { $inc: { saves: -1 } })
+      ]);
+  
+      // Get updated listing with new save count
+      const updatedListing = await Listing.findById(id);
+  
+      res.status(200).json({
+        success: true,
+        saves: updatedListing.saves
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+  export const getUserSavedListings = async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const savedListings = await SavedListing.find({ userId })
+        .populate('listingId')
+        .sort({ createdAt: -1 });
+  
+      res.status(200).json({
+        success: true,
+        savedListings: savedListings.map(sl => sl.listingId)
+      });
     } catch (error) {
       next(error);
     }

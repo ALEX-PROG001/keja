@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import 'leaflet/dist/leaflet.css';
@@ -7,7 +7,6 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Fix Leaflet default icon issues
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,
@@ -17,13 +16,13 @@ L.Icon.Default.mergeOptions({
 
 function MapController({ position }) {
   const map = useMap();
-  
+
   useEffect(() => {
     if (position) {
       map.flyTo(position, 16);
     }
   }, [position, map]);
-  
+
   return null;
 }
 
@@ -40,7 +39,7 @@ function LocationMarker({ position, setPosition }) {
       setPosition(e.latlng);
     },
   });
-  
+
   return position ? <Marker position={position} /> : null;
 }
 
@@ -57,17 +56,13 @@ export default function MapSelect({ onLocationSelect }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [mapReady, setMapReady] = useState(false);
+  const intervalRef = useRef(null);
 
-  const getCurrentLocation = async () => {
-    setLoading(true);
-    setError(null);
-    
+  const updateLocation = async () => {
     try {
-      if (!navigator.geolocation) {
-        throw new Error('Geolocation is not supported');
-      }
+      if (!navigator.geolocation) throw new Error('Geolocation not supported');
 
-      const position = await new Promise((resolve, reject) => {
+      const pos = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
           timeout: 5000,
@@ -76,32 +71,64 @@ export default function MapSelect({ onLocationSelect }) {
       });
 
       const coords = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
       };
 
       setPosition(coords);
       onLocationSelect(coords);
     } catch (err) {
-      console.error('Error getting location:', err);
-      setError('Could not get your location');
-      const defaultCoords = { lat: -1.2921, lng: 36.8219 };
-      setPosition(defaultCoords);
-      onLocationSelect(defaultCoords);
-    } finally {
-      setLoading(false);
+      console.warn('Live location failed, trying last known:', err);
+
+      try {
+        const lastKnown = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: false,
+            timeout: 3000,
+            maximumAge: Infinity
+          });
+        });
+
+        const coords = {
+          lat: lastKnown.coords.latitude,
+          lng: lastKnown.coords.longitude
+        };
+
+        setPosition(coords);
+        onLocationSelect(coords);
+      } catch (fallbackErr) {
+        console.error('Last known location also failed:', fallbackErr);
+        setError('Could not get your location, using default');
+        const defaultCoords = { lat: -1.2921, lng: 36.8219 };
+        setPosition(defaultCoords);
+        onLocationSelect(defaultCoords);
+      }
     }
   };
 
-  const handleSetPosition = (pos) => {
-    setPosition(pos);
-    onLocationSelect(pos);
+  const getCurrentLocation = async () => {
+    setLoading(true);
+    setError(null);
+    await updateLocation();
+    setLoading(false);
   };
 
   useEffect(() => {
     setMapReady(true);
     getCurrentLocation();
+
+    // Start location polling every 10 seconds
+    intervalRef.current = setInterval(updateLocation, 10000);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
+
+  const handleSetPosition = (pos) => {
+    setPosition(pos);
+    onLocationSelect(pos);
+  };
 
   return (
     <div className="space-y-4">
@@ -114,9 +141,7 @@ export default function MapSelect({ onLocationSelect }) {
         {loading ? 'Getting Location...' : 'Set Current Location'}
       </button>
 
-      {error && (
-        <p className="text-red-500 text-sm text-center">{error}</p>
-      )}
+      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
       <p className="text-center text-gray-500 text-sm">- or pick from map -</p>
 

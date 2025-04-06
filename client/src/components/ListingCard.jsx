@@ -79,7 +79,7 @@ export default function ListingCard({ listing, deletable, onDelete }) {
   const handlePinClick = () => {
     if (listing.location?.coordinates) {
       const [lng, lat] = listing.location.coordinates;
-      navigate(`/mapexplore?lat=${lat}&lng=${lng}`);
+      navigate(`/maplayout?lat=${lat}&lng=${lng}`);
     }
   };
 

@@ -106,20 +106,13 @@ export default function Home() {
                   Find your dream home
                 </p>
               </div>
-              {/* Glassmorphic "Explore on Map" Button */}
-              <button 
-                onClick={() => navigate('/mapexplore')}
-                className="absolute top-6 left-1/2 transform -translate-x-1/2 rounded-lg text-black font-semibold hover:bg-opacity-50 transition"
-                style={{
-                  width: "400px",
-                  padding: "0.75rem 1rem",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.3)"
-                }}
-              >
-                Explore on Map
-              </button>
+                            {/* Glassmorphic "Explore on Map" Button */}
+                            <button 
+  onClick={() => navigate('/mapexplore')}
+  className="absolute top-6 left-4 right-4 bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg py-2 px-3 flex items-center justify-center hover:bg-white/30 transition-all duration-300"
+>
+  <span className="text-black font-semibold text-lg">Explore on Map</span>
+</button>
             </div>
           </div>
         </div>
