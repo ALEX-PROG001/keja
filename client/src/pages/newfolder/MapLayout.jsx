@@ -1,5 +1,5 @@
-import BottomNav from '../components/BottomNav';
-import MapComponent from '../components/MapComponent';
+import BottomNav from '../../components/BottomNav';
+import MapComponent from '../../components/MapComponent';
 
 const MapLayout = () => {
   return (

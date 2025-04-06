@@ -81,14 +81,8 @@ export default function BlogPage() {
 
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">All Posts</h1>
-          <button
-            onClick={() => navigate("/create-post")}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
-          >
-            <Plus size={20} />
-            <span>New Post</span>
-          </button>
+          <h1 className="text-2xl font-bold text-gray-800">Explore new ideas</h1>
+          
         </div>
 
         {posts.length === 0 ? (
