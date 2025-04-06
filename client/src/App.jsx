@@ -22,7 +22,7 @@ import SavedListings from './pages/newfolder/SavedListings';
 import MyPosts from './pages/newfolder/MyPosts'; // Changed from Myposts
 import CreatePosts from './components/CreatePosts.jsx';
 import BlogPage from './components/BlogPage';
-
+import MapLayout from './pages/MainLayout.jsx';
 export default function App() {
   return (
     <BrowserRouter>
@@ -46,6 +46,7 @@ export default function App() {
           <Route path="/my-posts" element={<MyPosts />} />
           <Route path="/create-post" element={<CreatePosts />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/maplayout" element={<MainLayout />} />
         </Routes>
         <BottomNav />
       </div>
